@@ -47,7 +47,13 @@ public:
             std::cerr << "close error: " << db.error().name() << std::endl;
         }
     }    
-    
+    int32_t totalRecord() {
+        // Your implementation goes here
+        printf("totalRecord\n");
+        int res = db.count();
+        return res;
+    }
+
     void get(std::string& _return, const std::string& key) {
         // Your implementation goes here
         std::string res;
@@ -71,6 +77,7 @@ public:
 
     bool remove(const std::string& key) {
         // Your implementation goes here
+        
         printf("remove\n");
     }
 
@@ -83,7 +90,7 @@ int main(int argc, char **argv) {
     shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
     shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
     shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
-
+    
     TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
     server.serve();
     return 0;
