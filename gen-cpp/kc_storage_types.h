@@ -26,7 +26,6 @@ struct putOption {
 };
 
 extern const std::map<int, const char*> _putOption_VALUES_TO_NAMES;
-
 } // namespace
 
 #endif
