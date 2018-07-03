@@ -75,14 +75,13 @@ public:
             case putOption::type::add:
                 {
                     bool ok = db.set(key, value);
-                    //std::string res;
-                    //std::cout << "value in db" << db.get(key, &res) << ok << std::endl;
                     return ok;
                 }
                 break;
             case putOption::type::overide:
                 {
-                    
+                    bool ok = db.set(key, value);
+                    return ok;
                 }
                 break;
             case putOption::type::update:
