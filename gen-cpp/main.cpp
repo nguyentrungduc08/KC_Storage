@@ -68,29 +68,36 @@ public:
 
     bool put(const std::string& key, const std::string& value, const putOption::type opt) {
         // Your implementation goes here
-        bool ok = db.set(key, value);
-        std::string res;
-        std::cout << "value in db" << db.get(key, &res) << ok << std::endl;
+
         printf("put\n");
         
         switch (opt){
             case putOption::type::add:
                 {
-            
+                    bool ok = db.set(key, value);
+                    //std::string res;
+                    //std::cout << "value in db" << db.get(key, &res) << ok << std::endl;
+                    return ok;
                 }
                 break;
             case putOption::type::overide:
                 {
-                
+                    
                 }
                 break;
             case putOption::type::update:
                 {
-                
+                    int re = db.check(key);
+                    if (re == -1){
+                        return false;
+                    } else {
+                        bool ok = db.set(key, value);
+                        return ok;
+                    }    
                 }
                 break;
         }
-        return ok;
+        
     }
 
     bool remove(const std::string& key) {
