@@ -3,7 +3,7 @@ namespace cpp KC_Storage
 enum putOption {
 	add,
 	update,
-	remove
+	overide
 }
 
 

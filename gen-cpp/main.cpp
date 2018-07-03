@@ -72,6 +72,24 @@ public:
         std::string res;
         std::cout << "value in db" << db.get(key, &res) << ok << std::endl;
         printf("put\n");
+        
+        switch (opt){
+            case putOption::type::add:
+                {
+            
+                }
+                break;
+            case putOption::type::overide:
+                {
+                
+                }
+                break;
+            case putOption::type::update:
+                {
+                
+                }
+                break;
+        }
         return ok;
     }
 
