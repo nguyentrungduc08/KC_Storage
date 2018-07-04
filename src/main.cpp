@@ -24,6 +24,7 @@ using namespace kyotocabinet;
 
 using namespace  ::KC_Storage;
 
+
 class KC_StorageHandler : virtual public KC_StorageIf {
 private:
     HashDB db;
@@ -39,74 +40,124 @@ public:
             std::cerr << "open error: " << db.error().name() << std::endl; 
         }
     }
-
+    
     ~KC_StorageHandler() {
         if (db.close()) {
             std::cout << "close KC database success" << std::endl;
         } else {
             std::cerr << "close error: " << db.error().name() << std::endl;
         }
-    }    
-    int32_t totalRecord() {
-        // Your implementation goes here
+    }
+    
+    void totalRecord(Z_total& _return) {
+    // Your implementation goes here
         printf("totalRecord\n");
         int res = db.count();
-        return res;
+        Z_total result;
+        result.errorCode = 0;
+        result.total = res;
+        _return = result;
+        return;
     }
 
-    void get(std::string& _return, const std::string& key) {
-        // Your implementation goes here
+    void get(Z_data& _return, const std::string& key) {
+    // Your implementation goes here
         std::string res;
+        Z_data data;
         bool ok = db.get(key,&res);
+        
         if (ok == true){
-            _return = res;
+            data.errorCode = 0;
+            data.data = res;
+            _return = data;
+             
         } else {
-            _return = "";
+            data.errorCode = -1;
+            data.data = "";
+            _return = data;
         }
         printf("get\n");
     }
 
-    bool put(const std::string& key, const std::string& value, const putOption::type opt) {
-        // Your implementation goes here
-
+    void put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt) {
+    // Your implementation goes here
         printf("put\n");
         
         switch (opt){
             case putOption::type::add:
                 {
-                    bool ok = db.set(key, value);
-                    return ok;
+                    bool ok = db.add(key, value);
+                    Z_status status;
+                    if (ok)
+                    {
+                        status.errorCode = 0;
+                        status.status = true;
+                        _return = status;
+                    } else {
+                        status.errorCode = -1;
+                        status.status = false;
+                        _return = status;
+                    }
                 }
                 break;
             case putOption::type::overide:
                 {
                     bool ok = db.set(key, value);
-                    return ok;
+                    Z_status status;
+                    if (ok) {
+                        status.errorCode = 0;
+                        status.status = true;
+                        _return = status;
+                    } else {
+                        status.errorCode = -1;
+                        status.status = false;
+                        _return = status;   
+                    }
                 }
                 break;
             case putOption::type::update:
-                {
+                { 
+                    Z_status status;
                     int re = db.check(key);
                     if (re == -1){
-                        return false;
+                        status.errorCode = -1;
+                        status.status = false;
+                        _return = status;
                     } else {
                         bool ok = db.set(key, value);
-                        return ok;
+                        if (ok){
+                            status.errorCode = 0;
+                            status.status = true;
+                            _return = status;
+                        } else {
+                            status.errorCode = -1;
+                            status.status = false;
+                            _return = status;
+                        } 
                     }    
                 }
                 break;
         }
-        
     }
 
-    bool remove(const std::string& key) {
+    void remove(Z_status& _return, const std::string& key) {
         // Your implementation goes here
-        
+        bool ok = db.remove(key);
+        Z_status status;
+        if (ok){
+            status.errorCode = 0;
+            status.status = true;
+            _return = status;
+        } else {
+            status.errorCode = -1;
+            status.status = false;
+            _return = status;
+        } 
+           
         printf("remove\n");
     }
 
 };
-
 int main(int argc, char **argv) {
     int port = 9876;
     shared_ptr<KC_StorageHandler> handler(new KC_StorageHandler());

@@ -22,22 +22,22 @@ class KC_StorageHandler : virtual public KC_StorageIf {
     // Your initialization goes here
   }
 
-  int32_t totalRecord() {
+  void totalRecord(Z_total& _return) {
     // Your implementation goes here
     printf("totalRecord\n");
   }
 
-  void get(std::string& _return, const std::string& key) {
+  void get(Z_data& _return, const std::string& key) {
     // Your implementation goes here
     printf("get\n");
   }
 
-  bool put(const std::string& key, const std::string& value, const putOption::type opt) {
+  void put(Z_status& _return, const std::string& key, const std::string& value, const putOption::type opt) {
     // Your implementation goes here
     printf("put\n");
   }
 
-  bool remove(const std::string& key) {
+  void remove(Z_status& _return, const std::string& key) {
     // Your implementation goes here
     printf("remove\n");
   }
