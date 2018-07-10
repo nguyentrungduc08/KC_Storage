@@ -51,11 +51,12 @@
           <incDir>
             <pElem>/usr/local/include/boost</pElem>
             <pElem>/usr/local/include/thrift</pElem>
+            <pElem>/usr/local/include/Poco</pElem>
           </incDir>
           <commandLine>-std=c++11</commandLine>
         </ccTool>
         <linkerTool>
-          <commandLine>-lthrift -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc</commandLine>
+          <commandLine>-lthrift -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc -lPocoUtil -lPocoXML -lPocoJSON -lPocoNet -lPocoFoundation</commandLine>
         </linkerTool>
       </compileType>
       <folder path="TestFiles/f1">

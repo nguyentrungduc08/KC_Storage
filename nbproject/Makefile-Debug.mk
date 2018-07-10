@@ -69,27 +69,27 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/kc_storage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/kc_storage ${OBJECTFILES} ${LDLIBSOPTIONS} -lthrift -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/kc_storage ${OBJECTFILES} ${LDLIBSOPTIONS} -lthrift -lthriftnb -levent -lkyotocabinet -lz -lstdc++ -lrt -lpthread -lm -lc -lPocoUtil -lPocoXML -lPocoJSON -lPocoNet -lPocoFoundation
 
 ${OBJECTDIR}/src/KC_Storage.o: src/KC_Storage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/KC_Storage.o src/KC_Storage.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/KC_Storage.o src/KC_Storage.cpp
 
 ${OBJECTDIR}/src/kc_storage_constants.o: src/kc_storage_constants.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_constants.o src/kc_storage_constants.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_constants.o src/kc_storage_constants.cpp
 
 ${OBJECTDIR}/src/kc_storage_types.o: src/kc_storage_types.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_types.o src/kc_storage_types.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_types.o src/kc_storage_types.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main.o src/main.cpp
 
 # Subprojects
 .build-subprojects:
@@ -104,7 +104,7 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/newsimpletest.o ${OBJECTFILES:%.o=%_no
 ${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
 
 
 ${OBJECTDIR}/src/KC_Storage_nomain.o: ${OBJECTDIR}/src/KC_Storage.o src/KC_Storage.cpp 
@@ -115,7 +115,7 @@ ${OBJECTDIR}/src/KC_Storage_nomain.o: ${OBJECTDIR}/src/KC_Storage.o src/KC_Stora
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/KC_Storage_nomain.o src/KC_Storage.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/KC_Storage_nomain.o src/KC_Storage.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/KC_Storage.o ${OBJECTDIR}/src/KC_Storage_nomain.o;\
 	fi
@@ -128,7 +128,7 @@ ${OBJECTDIR}/src/kc_storage_constants_nomain.o: ${OBJECTDIR}/src/kc_storage_cons
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_constants_nomain.o src/kc_storage_constants.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_constants_nomain.o src/kc_storage_constants.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/kc_storage_constants.o ${OBJECTDIR}/src/kc_storage_constants_nomain.o;\
 	fi
@@ -141,7 +141,7 @@ ${OBJECTDIR}/src/kc_storage_types_nomain.o: ${OBJECTDIR}/src/kc_storage_types.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_types_nomain.o src/kc_storage_types.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/kc_storage_types_nomain.o src/kc_storage_types.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/kc_storage_types.o ${OBJECTDIR}/src/kc_storage_types_nomain.o;\
 	fi
@@ -154,7 +154,7 @@ ${OBJECTDIR}/src/main_nomain.o: ${OBJECTDIR}/src/main.o src/main.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main_nomain.o src/main.cpp;\
+	    $(COMPILE.cc) -g -I/usr/local/include/boost -I/usr/local/include/thrift -I/usr/local/include/Poco -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/main_nomain.o src/main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/main.o ${OBJECTDIR}/src/main_nomain.o;\
 	fi

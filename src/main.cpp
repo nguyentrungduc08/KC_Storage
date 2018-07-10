@@ -11,12 +11,30 @@
 //Kyoto Cabinet database
 #include <kchashdb.h>
 
-//KC Storage Service Interface.
+#include "Poco/Util/Application.h"
+#include "Poco/Util/Option.h"
+#include "Poco/Util/OptionSet.h"
+#include "Poco/Util/HelpFormatter.h"
+#include "Poco/Util/AbstractConfiguration.h"
+
+#include "Poco/Notification.h"
+#include "Poco/NotificationQueue.h"
+#include "Poco/ThreadPool.h"
+#include "Poco/Runnable.h"
+#include "Poco/AutoPtr.h"
+
 
 using namespace ::apache::thrift;
 using namespace ::apache::thrift::protocol;
 using namespace ::apache::thrift::transport;
 using namespace ::apache::thrift::server;
+
+using Poco::Util::Application;
+using Poco::Util::Option;
+using Poco::Util::OptionSet;
+using Poco::Util::HelpFormatter;
+using Poco::Util::AbstractConfiguration;
+using Poco::Util::OptionCallback;
 
 using boost::shared_ptr;
 
@@ -38,7 +56,7 @@ public:
             std::cout << "open KC database success" << std::endl; 
         } else {
             std::cerr << "open error: " << db.error().name() << std::endl; 
-        }
+        }   
     }
     
     ~KC_StorageHandler() {
@@ -158,18 +176,114 @@ public:
     }
 
 };
-int main(int argc, char **argv) {
-    int port = 9876;
-    shared_ptr<KC_StorageHandler> handler(new KC_StorageHandler());
-    shared_ptr<TProcessor> processor(new KC_StorageProcessor(handler));
-    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
-    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
-    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
+class ZStorageService : public Application {
+public:
+
+    ZStorageService() : _helpRequested(false) {
+        std::cout << "Start POCO Application Storage service..." << std::endl;
+    }
+
+protected:
+
+    void 
+    initialize(Application& self) {
+        loadConfiguration(); // load default configuration files, if present
+        Application::initialize(self);
+        // add your own initialization code here
+    }
+
+    void 
+    uninitialize() {
+        // add your own uninitialization code here
+        Application::uninitialize();
+    }
+
+    void 
+    reinitialize(Application& self) {
+        Application::reinitialize(self);
+        // add your own reinitialization code here
+    }
+
+    void 
+    defineOptions(OptionSet& options) {
+        Application::defineOptions(options);
+
+        options.addOption(
+                Option("help", "h", "display help information on command line arguments")
+                .required(false)
+                .repeatable(false)
+                .callback(OptionCallback<ZStorageService>(this, &ZStorageService::handleHelp)));
+
+        options.addOption(
+                Option("bind", "b", "bind option value to test.property")
+                .required(false)
+                .repeatable(false)
+                .argument("value")
+                .binding("test.property"));
+    }
+
+    void 
+    handleHelp(const std::string& name, const std::string& value) {
+        _helpRequested = true;
+        displayHelp();
+        stopOptionsProcessing();
+    }
+
+    void 
+    displayHelp() {
+        HelpFormatter helpFormatter(options());
+        helpFormatter.setCommand(commandName());
+        helpFormatter.setUsage("OPTIONS");
+        helpFormatter.setHeader("A sample application that demonstrates some of the features of the Poco::Util::Application class.");
+        helpFormatter.format(std::cout);
+    }
+
+    int 
+    main(const ArgVec& args) {
+        std::cout << "begin main" << std::endl;
+        if (!_helpRequested) {
+            runService();
+
+        }
+        return Application::EXIT_OK;
+    }
+
+private:
+    bool        _helpRequested;
+    int         _port;
+    std::string _host;
     
-    TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
-    server.serve();
-    return 0;
-}
+    void 
+    runService(){
+        int port = 9876;
+        shared_ptr<KC_StorageHandler> handler(new KC_StorageHandler());
+        shared_ptr<TProcessor> processor(new KC_StorageProcessor(handler));
+        shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+        shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+        shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
+        TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
+        server.serve();
+        return;
+    }
+};
+
+POCO_APP_MAIN(ZStorageService)
+
+
+//int main(int argc, char **argv) {
+//    int port = 9876;
+//    shared_ptr<KC_StorageHandler> handler(new KC_StorageHandler());
+//    shared_ptr<TProcessor> processor(new KC_StorageProcessor(handler));
+//    shared_ptr<TServerTransport> serverTransport(new TServerSocket(port));
+//    shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+//    shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+//    
+//    TSimpleServer server(processor, serverTransport, transportFactory, protocolFactory);
+//    server.serve();
+//    return 0;
+//}
 
 
 
